@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Clients;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,11 +30,13 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddCors(options => options.AddPolicy("CorsPolicy", 
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
             policy => policy
             .AllowAnyHeader()
             .AllowAnyOrigin()
             .WithOrigins("http://localhost:3001")));
+
+            services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddControllers();
         }
 
